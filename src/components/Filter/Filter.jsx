@@ -1,18 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { nanoid } from '@reduxjs/toolkit';
+import { useSelector, useDispatch } from 'react-redux';
+import { getFilter } from 'redux/selectors';
+import { changeFilter } from 'redux/filterSlice';
 
-function Filter({ value, onChangeFilter }) {
+const filterInputId = nanoid();
+
+const Filter = () => {
+  
+  const value = useSelector(getFilter);
+  const dispatch = useDispatch();
+
+  const onChange = event => {
+    const normalizedValue = event.target.value.toLowerCase();
+
+    dispatch(changeFilter(normalizedValue));
+  };
     return (
       <div>
         <h4>Find contacts by name</h4>
-        <input onChange={onChangeFilter} value={value} placeholder='Contact name'/>
+        <input onChange={onChange} value={value} id={filterInputId} placeholder='Contact name'/>
       </div>
     );
   }
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChangeFilter: PropTypes.func.isRequired,
-};
 
 export default Filter;
